@@ -1,2 +1,2 @@
 # SQL
-Portfolio for SQL
+SQL Portfolio
