@@ -1,0 +1,45 @@
+--Create a store database
+
+CREATE TABLE store (id INTEGER PRIMARY KEY, item TEXT, gender TEXT, cost INTEGER, size TEXT);
+
+INSERT INTO store VALUES 
+(1, "Jeans", "M", 20, "S"),
+(2, "Jeans", "M", 21, "M"),
+(3, "Jeans", "M", 24, "L"),
+(4, "Jeans", "F", 30, "S"),
+(5, "Jeans", "F", 32, "M"),
+(6, "Jeans", "F", 35, "L"),
+(7, "Dress", "F", 40, "S"),
+(8, "Dress", "F", 45, "XL"),
+(9, "Hat", "NA", 33, "NA"),
+(10, "Socks", "NA", 7, "NA"),
+(11, "Skirt", "F", 22, "M"),
+(12, "Sunglasses", "NA", 14, "NA"),
+(13, "Necklace", "F", 60, "NA"),
+(14, "Towel", "NA", 15, "L"),
+(15, "Headband", "F", 12, "NA");
+
+--What can I buy with a size "S" (small)?
+SELECT * FROM store
+WHERE size = "S"
+ORDER BY gender;
+
+--Items available for both male and females
+SELECT item
+FROM store
+WHERE gender = "NA";
+
+--What is the most expensive item, and for how much?
+SELECT item, MAX(cost)
+FROM store;
+
+--How many non-unique sizes are there for females 
+SELECT COUNT (size)
+FROM store
+WHERE gender = "F";
+
+--What is the cheapest to most expensive item in the store
+SELECT item, size, cost
+FROM store
+GROUP BY item
+ORDER BY cost ASC;
