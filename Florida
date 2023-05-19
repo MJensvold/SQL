@@ -1,0 +1,74 @@
+/* Create table about florida */
+
+CREATE TABLE florida (id INTEGER PRIMARY KEY AUTOINCREMENT, city TEXT, county TEXT);
+
+/* Insert Values*/
+
+INSERT INTO florida VALUES 
+(1, "Miami", "Miami-Dade"),
+(2, "Tampa", "Hillsborough"),
+(3, "Tallahassee", "Leon"),
+(4, "Jacksonville", "Duval"),
+(5, "Orlando", "Orange"),
+(6, "Key West", "Monroe");
+
+/* Create table about Florida County Information */
+
+CREATE TABLE florida_county (id INTEGER PRIMARY KEY AUTOINCREMENT, county TEXT, population INTEGER, square_miles INTEGER);
+
+/* Insert Values*/
+
+INSERT INTO florida_county VALUES
+(6, "Monroe", 82170, 3737),
+(5, "Orange", 1423000, 1003),
+(4, "Duval", 999935, 918),
+(3, "Leon", 292817 , 702),
+(2, "Hillsborough", 1478000, 1266),
+(1, "Miami-Dade", 2663000, 2431);
+
+/* Create table about florida_weather */
+
+CREATE TABLE rain_fall (id INTEGER PRIMARY KEY, county_id INTEGER, year INTEGER, rain_fall_inches INTEGER); 
+
+INSERT INTO rain_fall VALUES 
+(1, 1, 2021, 61.3),
+(2, 1, 2022, 71.6),
+(3, 2, 2021, 50.1),
+(4, 2, 2022, 52.1),
+(5, 3, 2021, 48.6),
+(6, 3, 2022, 58.4),
+(7, 4, 2021, 56.3),
+(8, 4, 2022, 45.4),
+(9, 5, 2021, 51.7),
+(10, 5, 2022, 63.5),
+(11, 6, 2021, 40.1),
+(12, 6, 2022, 42.3);
+
+/* Join all tables */
+
+SELECT *
+FROM florida
+JOIN florida_county AS fc
+USING (county)
+JOIN rain_fall AS rf
+ON fc.id = rf.county_id;
+
+/* What county/city had the most rainfall in 2021? */
+
+SELECT city, florida.county, year, rain_fall_inches AS rainfall
+FROM florida
+JOIN florida_county AS fc
+USING (county)
+JOIN rain_fall AS rf
+ON fc.id = rf.county_id
+WHERE year = 2021
+ORDER BY rainfall DESC;
+
+/* How much rainfall did each major city in Florida have on average in the past two years? */
+
+SELECT city, ROUND(AVG(rain_fall_inches)) AS Avg_rainfall
+FROM florida
+LEFT OUTER JOIN rain_fall AS rf
+ON florida.id = rf.county_id
+GROUP BY city
+ORDER BY avg_rainfall DESC;
