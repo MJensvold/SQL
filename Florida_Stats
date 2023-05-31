@@ -72,3 +72,17 @@ LEFT OUTER JOIN rain_fall AS rf
 ON florida.id = rf.county_id
 GROUP BY city
 ORDER BY avg_rainfall DESC;
+
+/* Average popularity for the artists in the Spotify data table. 
+Then for every artist with an average popularity of 90 or above, 
+show their name, their average popularity, and label them as a “Top Star”. */
+
+WITH avg_popularity AS (
+    SELECT AVG(popularity) AS avg_pop, artist_name
+    FROM SpotifyData
+    GROUP BY artist_name
+    )
+SELECT artist_name AS 'Top Star', avg_pop
+FROM avg_popularity
+WHERE avg_pop >= 90
+ORDER BY avg_pop DESC;
