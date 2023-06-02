@@ -1,0 +1,66 @@
+/* Show Customers (their full names, customer ID, and country) who are not in the US */
+
+SELECT FirstName, LastName, CustomerID, Country
+FROM chinook.customers
+WHERE Country <> 'USA';
+
+/* Find the Invoices of customers who are from Brazil. 
+Show the customer's full name, Invoice ID, Date of the invoice, and billing country.*/ 
+
+SELECT FirstName, LastName, invoiceid, invoicedate, billingcountry
+FROM chinook.customers
+JOIN chinook.invoices
+USING (customerid)
+WHERE Country = 'Brazil'
+GROUP BY customerid;
+
+/* Show the Employees who are Sales Agents. */
+
+SELECT *
+FROM chinook.employees
+WHERE title = 'Sales Support Agent';
+
+/* Show the Invoice Total, Customer name, 
+Country, and Sales Agent name for all invoices and customers.*/
+
+SELECT c.firstname, c.lastname, c.country, e.lastname AS Rep_lastname, total 
+FROM chinook.invoices
+JOIN chinook.customers AS c
+USING (customerid)
+JOIN chinook.employees AS e
+ON e.employeeid = c.supportrepid;
+
+/*Show the total sales made by each sales agent. */
+
+SELECT e.lastname AS Sales_Agent, ROUND(SUM(total)) AS Total_Sales
+FROM chinook.invoices
+JOIN chinook.customers AS c
+USING (customerid)
+JOIN chinook.employees AS e
+ON e.employeeid = c.supportrepid
+GROUP BY Sales_Agent
+ORDER BY Total_Sales DESC;
+
+/* How many Invoices were there in 2009? */
+
+SELECT COUNT(invoiceid) AS Total_Invoices_2009
+FROM chinook.invoices
+WHERE invoicedate LIKE '2009%';
+
+/* What are the total sales for 2009? */
+
+SELECT ROUND(SUM(total)) AS Total_Sales_2009
+FROM chinook.invoices
+WHERE invoicedate LIKE '2009%';
+
+/* Which sales agent made the most dollars in sales in 2009? */
+
+SELECT e.lastname AS Sales_Agent, ROUND(SUM(total)) AS Total_Sales_2009
+FROM chinook.invoices
+JOIN chinook.customers AS c
+USING (customerid)
+JOIN chinook.employees AS e
+ON e.employeeid = c.supportrepid
+WHERE invoicedate LIKE '2009%'
+GROUP BY Sales_Agent
+ORDER BY Total_Sales_2009 DESC;
